@@ -2,20 +2,22 @@ import os
 import string
 import random
 
-KEY_PATH = "i:\\pythonProject\\companyname.txt"
-DC_PATH = "i:\\pythonProject\\area.txt"
-COM_PATH = "i:\\pythonProject\\com.txt"
+BASE_DIR =  os.path.dirname(__file__)
+
+KEY_PATH = BASE_DIR  +"/companyname.txt"
+DC_PATH = BASE_DIR  +"/area.txt"
+COM_PATH = BASE_DIR  + "/com.txt"
 
 comArea = ""
 comName = ""
-comCom = "" 
+comCom = ""
 
 # 随机抽取文本行内容
 ki = []
-def get_list_item(pathstr = KEY_PATH): 
-    with open(pathstr, 'r', encoding='UTF-8') as file: 
-        data = file.read() 
-        districtlist = data.split('\n')       
+def get_list_item(pathstr = KEY_PATH):
+    with open(pathstr, 'r', encoding='UTF-8') as file:
+        data = file.read()
+        districtlist = data.split('\n')
     #   strs = "{'state':" + state + ",'city':" + city + ",'district':" + district + ", 'code': " + code +"}"
     return districtlist
 
@@ -34,10 +36,11 @@ def randomCompany():
     result += comArea
     result += comName
     result += comCom
-    
-    return result
-  
-#randomCompany()
 
-# getdistrictcode()
-# print( ) 
+    return result
+
+
+if __name__ == '__main__':
+    print(randomCompany())
+
+# print( )

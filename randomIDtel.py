@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Nov  8 13:55:22 2018
-
 @author: wangxi
 """
 import os
@@ -10,11 +9,8 @@ import datetime
 import time
 import string
 
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-DC_PATH = BASE_DIR  + "i:\pythonProject\districtcode.txt"
-
-DC_PATH = "i:\pythonProject\districtcode.txt"
-
+BASE_DIR =  os.path.dirname(__file__)
+DC_PATH = BASE_DIR  + "/districtcode.txt"
 
 # print(random.random())#随机浮点数，默认取0-1，不能指定范围
 # print(random.randint(1,20))#随机整数
@@ -28,59 +24,78 @@ DC_PATH = "i:\pythonProject\districtcode.txt"
 # print(string.digits)#所有的数字
 # print(string.ascii_letters)#所有的字母
 # print(string.punctuation)#所有的特殊字符
-
-
-
 # 随机生成手机号码
+
+
 def createPhone():
-    prelist=["130","131","132","133","134","135","136","137","138","139","147","150","151","152","153","155","156","157","158","159","186","187","188"]
-    return random.choice(prelist)+"".join(random.choice("0123456789") for i in range(8))
+      prelist=["130","131","132","133","134","135","136","137","138","139","147","150","151","152","153","155","156","157","158","159","186","187","188"]
+      return random.choice(prelist)+"".join(random.choice("0123456789") for i in range(8))
 
 # 随机生成身份证号
-def getdistrictcode(): 
-    with open(DC_PATH) as file: 
-        data = file.read() 
-        districtlist = data.split('\n') 
-    for node in districtlist: 
-    #print node 
-        if node[10:11] != ' ': 
-            state = node[10:].strip() 
-        if node[10:11]==' 'and node[12:13]!=' ': 
-            city = node[12:].strip() 
-        if node[10:11] == ' 'and node[12:13]==' ': 
-            district = node[14:].strip() 
-            code = node[0:6] 
-            codelist.append({"state":state,"city":city,"district":district,"code":code})
+
+
+def getdistrictcode():
+    with open(DC_PATH, 'r', encoding='UTF-8') as file:
+        data = file.read()
+        districtlist = data.split('\n')
+    for node in districtlist:
+    # print node
+        node = node.encode('utf-8').decode('utf-8-sig').strip()
+    # 省
+        if node[10:11] != ' ':
+            state = node[10:].strip()
+    # 城市
+        if node[10:11] == ' ' and node[12:13] != ' ':
+            city = node[12:].strip()
+
+        if node[10:11] == ' ' and node[12:13] == ' ':
+            district = node[14:].strip()
+            code = node[0:6]
+            codelist.append({"state":state,"city":city,"district":district,"code":code, "idc":0})
 
 # 构建随机身份证号
-def generatorIDC(): 
-    global codelist 
-    codelist = [] 
+def generatorIDC():
+    global codelist
+    codelist = []
+    idcobj = {}
     if not codelist:
         getdistrictcode()
-    id = codelist[random.randint(0,len(codelist))]['code'] #地区项 
-    id = id + str(random.randint(1930,2013)) #年份项 
-    da = datetime.date.today()+datetime.timedelta(days=random.randint(1,366)) #月份和日期项 
-    id = id + da.strftime('%m%d') 
-    id = id+ str(random.randint(100,300))#，顺序号简单处理 
+
+    ranCode = random.randint(0,len(codelist)-1)
+    idcobj = codelist[ranCode]
+
+    id = idcobj['code'] #地区项
+    id = id + str(random.randint(1930,2017)) #年份项
+    da = datetime.date.today()+datetime.timedelta(days=random.randint(1,366)) #月份和日期项
+    id = id + da.strftime('%m%d')
+    id = id+ str(random.randint(100,300))#，顺序号简单处理
+
+    print(id)
 
     i = 0
     count = 0
-    weight = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2] #权重项 
-    checkcode ={'0':'1','1':'0','2':'X','3':'9','4':'8','5':'7','6':'6','7':'5','8':'5','9':'3','10':'2'} #校验码映射 
-    for i in range(0,len(id)): 
-        count = count +int(id[i])*weight[i] 
-        id = id + checkcode[str(count%11)] #算出校验码 
-        return id
+    weight = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2] #权重项
+    checkcode ={'0':'1','1':'0','2':'X','3':'9','4':'8','5':'7','6':'6','7':'5','8':'5','9':'3','10':'2'} #校验码映射
+    for i in range(0,len(id)):
+        count = count +int(id[i])*weight[i]
+        id = id + checkcode[str(count%11)] #算出校验
+        idcobj['idc'] = id
+        return idcobj
+
+
+
+
 
 # 随机生成邮箱
 def createEmail( emailType=None, rang=None):
     __emailtype = ["@qq.com", "@163.com", "@126.com", "@189.com"]
+
     # 如果没有指定邮箱类型，默认在 __emailtype中随机一个
     if emailType == None:
         __randomEmail = random.choice(__emailtype)
     else:
         __randomEmail = emailType
+
     # 如果没有指定邮箱长度，默认在4-10之间随机
     if rang == None:
         __rang = random.randint(4, 10)
@@ -107,13 +122,18 @@ def newStr(length=8):
     return randomStr
 
 if __name__ == '__main__':
+    idobj = generatorIDC()
+
     print("createEmail: " + createEmail())
     print("createEmail: " + createEmail(emailType='@emoney.cn',rang=12))
     print("createPhone: " + createPhone())
-    print("generatorIDC: " + generatorIDC())
+    print("generatorIDC: " + idobj['state'])
+    print("generatorIDC: " + idobj['city'])
+    print("generatorIDC: " + idobj['district'])
+    print("generatorIDC: " + idobj['idc'])
     print("newStr: " + newStr(8))
     print("randomChars: " + randomChars(8))
-    
+
 #createEmail: Ontf@126.com
 #createEmail: IREIhiX96OS7@emoney.cn
 #createPhone: 13543185057
