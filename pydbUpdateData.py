@@ -10,7 +10,7 @@ import randomName
 import genCompany
 
 # 打开数据库连接
-db = MySQLdb.connect("localhost", "root", "qwer1234", "test",port=3308, charset='utf8' )
+db = MySQLdb.connect("localhost", "root", "qwer1234", "test",port=3306, charset='utf8' )
 
 # 使用cursor()方法获取操作游标
 cursor = db.cursor()
