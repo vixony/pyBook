@@ -2,11 +2,10 @@
 
 > MySQLdb是用于Python链接Mysql数据库的接口，它实现了Python数据库API规范V2.0，基于MySql C API上建立的。
 
-#### \#\#\# 1. MySQLdb安装
+#### 1. MySQLdb安装
 
-1 - 安装Mysql，参考上篇博客数据库之MySql。
-
-2 - 使用pip安装MySQLdb：
+1. 安装Mysql，参考上篇博客数据库之MySql。
+2. 使用pip安装MySQLdb：
 
 * ```
   pip install MySQL-python
