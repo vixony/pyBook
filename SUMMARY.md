@@ -7,4 +7,5 @@
 * [Redis操作命令](rediscao-zuo-ming-ling.md)
 * [BFED](bfed.md)
 * [Docker](docker.md)
+* [REDIS命令](redisming-ling.md)
 
